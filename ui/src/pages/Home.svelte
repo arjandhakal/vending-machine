@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Pages } from "../constants";
-  import { displayPage } from "../store";
+  import { displayPage } from "../store/index";
   import MessagePanel from "../lib/MessagePanel.svelte";
   import { routes } from "../route";
 

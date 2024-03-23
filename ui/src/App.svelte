@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { displayPage } from "./store";
+  import { displayPage } from "./store/index";
   import Home from "./pages/Home.svelte";
   import { Pages } from "./constants";
   import Items from "./pages/Items.svelte";
