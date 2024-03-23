@@ -1,4 +1,4 @@
-import { initApp } from "./app";
+import { initApp, shutdownApp } from "./app";
 import { loadConfig } from "./utils/config";
 import { globalLogger } from "./utils/logger";
 import express from "express";
@@ -31,6 +31,7 @@ async function main() {
         signal,
       });
     },
+    onShutdown: () => shutdownApp(),
     finally: () => {
       globalLogger.info("Vending machine turned offf!!");
     },
