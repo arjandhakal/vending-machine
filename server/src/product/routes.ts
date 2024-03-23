@@ -7,7 +7,7 @@ productRouter.get(
   "/",
   asyncWrapper(async (req: Request, res: Response) => {
     res
-      .send(200)
+      .status(200)
       .json({ products: [], message: "fetched products succesfully" });
-  })
+  }),
 );

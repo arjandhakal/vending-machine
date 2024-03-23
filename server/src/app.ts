@@ -9,6 +9,7 @@ import {
 } from "express";
 import { HttpException } from "./utils/exception";
 import { productRouter } from "./product/routes";
+import cors from "cors";
 
 let server: http.Server | undefined = undefined;
 
@@ -31,6 +32,7 @@ function errorHandler(
 
 export async function initApp(app: Express): Promise<http.Server> {
   server = http.createServer(app);
+  app.use(cors());
 
   const apiRouter = Router();
   apiRouter.get("/", (_req, res) => res.sendStatus(200));
