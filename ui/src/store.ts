@@ -1,4 +1,5 @@
 import { writable } from "svelte/store";
+import { Pages } from "./constants";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -26,5 +27,10 @@ const createProducts = () => {
     fetchProducts,
   };
 };
+
+export const displayPage = writable<{
+  current: Pages;
+  data?: Record<string, any>;
+}>({ current: Pages.HOME, data: {} });
 
 export const products = createProducts();
