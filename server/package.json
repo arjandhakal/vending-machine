@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "npx tsc",
     "dev": "ts-node-dev --respawn --transpile-only ./src/main.ts",
     "test": "jest",
     "test:watch": "jest --watchAll"
