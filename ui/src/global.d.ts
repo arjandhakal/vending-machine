@@ -1,10 +1,14 @@
 declare global {
-  type Product = {
+  interface Product {
     id: number;
     name: string;
     price: number;
     stock: number;
-  };
+  }
+
+  interface CartItem extends Product {
+    quantity: number;
+  }
 
   type MachineBalance = {
     coinsInStock: number;
