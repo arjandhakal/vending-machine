@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+dependencies:
+  '@fontsource/dongle':
+    specifier: ^5.0.18
+    version: 5.0.18
+
 devDependencies:
   '@sveltejs/vite-plugin-svelte':
     specifier: ^3.0.2
@@ -246,6 +251,10 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@fontsource/dongle@5.0.18:
+    resolution: {integrity: sha512-ewnjkVVLx5wEFHSO+g8p6wQFI6kD8s0MEy1pPn2tiZQ5JNwV7/k6fYDvWReLyiRrEiIHAsU1mFz3J6adCjSlqg==}
+    dev: false
 
   /@jest/schemas@29.6.3:
     resolution: {integrity: sha512-mo5j5X+jIZmJQveBKeS/clAueipV7KgiX1vMgCxam1RNYiqE1w62n0/tJJnHtjW8ZHcQco5gY85jA3mi0L+nSA==}
