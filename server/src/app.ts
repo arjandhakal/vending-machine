@@ -6,10 +6,14 @@ import {
   Response,
   NextFunction,
   Errback,
+  json,
 } from "express";
 import { HttpException } from "./utils/exception";
 import { productRouter } from "./product/routes";
 import cors from "cors";
+import { balanceRouter } from "./balance/routes";
+import { globalLogger } from "./utils/logger";
+import { transactionRouter } from "./transaction/routes";
 
 let server: http.Server | undefined = undefined;
 
@@ -17,7 +21,7 @@ function errorHandler(
   err: Errback,
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ): void {
   const httpError = new HttpException();
   if (err instanceof HttpException) {
@@ -33,10 +37,13 @@ function errorHandler(
 export async function initApp(app: Express): Promise<http.Server> {
   server = http.createServer(app);
   app.use(cors());
+  app.use(json());
 
   const apiRouter = Router();
   apiRouter.get("/", (_req, res) => res.sendStatus(200));
   apiRouter.use("/product/v1", productRouter);
+  apiRouter.use("/balance/v1", balanceRouter);
+  apiRouter.use("/transaction/v1", transactionRouter);
 
   app.use("/api/", apiRouter);
   app.use("/", apiRouter);

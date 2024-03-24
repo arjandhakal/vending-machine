@@ -17,4 +17,16 @@ describe("Product Routes", () => {
     const res1 = await request(app).get("/api/product/v1");
     expect(res1.status).toBe(StatusCodes.OK);
   });
+
+  test("products are fetch succesfully", async () => {
+    const res = await request(app).get("/api/product/v1");
+    expect(res.body.data).toBe[
+      expect.objectContaining({
+        id: expect.any(Number),
+        name: expect.any(String),
+        price: expect.any(Number),
+        stock: expect.any(Number),
+      })
+    ];
+  });
 });
