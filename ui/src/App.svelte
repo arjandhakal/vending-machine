@@ -4,6 +4,7 @@
   import { Pages } from "./constants";
   import Items from "./pages/Items.svelte";
   import InsertCurrency from "./pages/InsertCurrency.svelte";
+  import TransactionResult from "./pages/TransactionResult.svelte";
 </script>
 
 <main>
@@ -17,6 +18,10 @@
 
   {#if $displayPage.current === Pages.INSERT_CURRENCY}
     <InsertCurrency />
+  {/if}
+
+  {#if $displayPage.current === Pages.TRANSACTION_RESULT}
+    <TransactionResult />
   {/if}
 </main>
 

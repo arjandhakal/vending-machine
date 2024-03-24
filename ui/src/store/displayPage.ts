@@ -9,6 +9,6 @@ export const displayPage = writable<{
 export function navigateTo(page: Pages, data?: Record<string, any>) {
   displayPage.set({
     current: page,
-    ...(data ? data : {}),
+    ...(data ? data : { data }),
   });
 }

@@ -40,3 +40,23 @@ export async function insertBalanceAPI(data: { type: string; amount: number }) {
   }
   return result;
 }
+
+export async function makePurchaseAPI(cartItems: CartItem[]) {
+  const url = apiUrl + "/transaction/v1";
+  const body = JSON.stringify({ cartItems });
+  const headers = {
+    "Content-Type": "application/json",
+  };
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers,
+    body,
+  });
+
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(result.message);
+  }
+  return result;
+}
