@@ -20,3 +20,10 @@ export const insertBalance = async (
   }
   return database;
 };
+
+export const updateBalance = async (values: Balance): Promise<Balance> => {
+  for (const key in values) {
+    database[key] = values[key];
+  }
+  return database;
+};

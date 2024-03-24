@@ -26,3 +26,17 @@ export const database: Product[] = [
 export const fetchproducts = async (): Promise<Product[]> => {
   return database;
 };
+
+export const updateMany = async (
+  updates: Partial<Product>[]
+): Promise<Product[]> => {
+  updates.forEach((update) => {
+    const productToUpdate = database.find(
+      (product) => product.id === update.id
+    );
+    if (productToUpdate) {
+      Object.assign(productToUpdate, update);
+    }
+  });
+  return database;
+};

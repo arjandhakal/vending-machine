@@ -13,6 +13,7 @@ import { productRouter } from "./product/routes";
 import cors from "cors";
 import { balanceRouter } from "./balance/routes";
 import { globalLogger } from "./utils/logger";
+import { transactionRouter } from "./transaction/routes";
 
 let server: http.Server | undefined = undefined;
 
@@ -42,6 +43,7 @@ export async function initApp(app: Express): Promise<http.Server> {
   apiRouter.get("/", (_req, res) => res.sendStatus(200));
   apiRouter.use("/product/v1", productRouter);
   apiRouter.use("/balance/v1", balanceRouter);
+  apiRouter.use("/transaction/v1", transactionRouter);
 
   app.use("/api/", apiRouter);
   app.use("/", apiRouter);

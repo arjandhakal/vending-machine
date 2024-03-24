@@ -12,6 +12,9 @@ declare global {
     userCoinsInserted: number;
     userCashInserted: number;
   };
+  interface CartItem extends Product {
+    quantity: number;
+  }
 }
 
 export {};
