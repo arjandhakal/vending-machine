@@ -6,11 +6,13 @@ import {
   Response,
   NextFunction,
   Errback,
+  json,
 } from "express";
 import { HttpException } from "./utils/exception";
 import { productRouter } from "./product/routes";
 import cors from "cors";
 import { balanceRouter } from "./balance/routes";
+import { globalLogger } from "./utils/logger";
 
 let server: http.Server | undefined = undefined;
 
@@ -34,6 +36,7 @@ function errorHandler(
 export async function initApp(app: Express): Promise<http.Server> {
   server = http.createServer(app);
   app.use(cors());
+  app.use(json());
 
   const apiRouter = Router();
   apiRouter.get("/", (_req, res) => res.sendStatus(200));

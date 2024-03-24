@@ -11,3 +11,12 @@ export const database: Balance = {
 export const fetchBalance = async (): Promise<Balance> => {
   return database;
 };
+
+export const insertBalance = async (
+  values: Record<keyof Balance, number>
+): Promise<Balance> => {
+  for (const key in values) {
+    database[key] += values[key];
+  }
+  return database;
+};
