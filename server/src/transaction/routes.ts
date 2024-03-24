@@ -25,7 +25,7 @@ async function handleTransaction(req: Request, res: Response): Promise<void> {
   res.status(StatusCodes.OK).json({
     success: true,
     message: "Items purchased successfully",
-    change,
+    data: { change },
   });
 }
 

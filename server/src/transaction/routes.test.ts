@@ -64,9 +64,11 @@ describe("Transaction Routes", () => {
     const expectedApiOutput = {
       success: true,
       message: expect.any(String),
-      change: {
-        coins: 50,
-        cash: 0,
+      data: {
+        change: {
+          coins: 50,
+          cash: 0,
+        },
       },
     };
 
