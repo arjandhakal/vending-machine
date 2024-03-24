@@ -6,11 +6,11 @@ declare global {
     stock: number;
   };
 
-  type MachineBalance = {
-    coinsInStock: number;
-    cashInStock: number;
-    insertedCash: number;
-    insertedCoin: number;
+  type Balance = {
+    coinsInMachine: number;
+    cashInMachine: number;
+    userCoinsInserted: number;
+    userCashInserted: number;
   };
 }
 

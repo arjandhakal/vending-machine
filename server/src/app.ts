@@ -10,6 +10,7 @@ import {
 import { HttpException } from "./utils/exception";
 import { productRouter } from "./product/routes";
 import cors from "cors";
+import { balanceRouter } from "./balance/routes";
 
 let server: http.Server | undefined = undefined;
 
@@ -17,7 +18,7 @@ function errorHandler(
   err: Errback,
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ): void {
   const httpError = new HttpException();
   if (err instanceof HttpException) {
@@ -37,6 +38,7 @@ export async function initApp(app: Express): Promise<http.Server> {
   const apiRouter = Router();
   apiRouter.get("/", (_req, res) => res.sendStatus(200));
   apiRouter.use("/product/v1", productRouter);
+  apiRouter.use("/balance/v1", balanceRouter);
 
   app.use("/api/", apiRouter);
   app.use("/", apiRouter);

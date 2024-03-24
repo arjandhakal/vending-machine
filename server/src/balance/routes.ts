@@ -1,17 +1,17 @@
 import { Router, Request, Response } from "express";
 import { asyncWrapper } from "../utils/async";
-import { fetchproducts } from "./db";
+import { fetchBalance } from "./db";
 import { StatusCodes } from "http-status-codes";
 
-export const productRouter = Router();
+export const balanceRouter = Router();
 
-productRouter.get(
+balanceRouter.get(
   "/",
   asyncWrapper(async (_req: Request, res: Response) => {
-    const products = await fetchproducts();
+    const balance = await fetchBalance();
     res.status(StatusCodes.OK).json({
-      data: products,
-      message: "fetched products succesfully",
+      data: balance,
+      message: "fetched balance succesfully",
       success: true,
     });
   })
