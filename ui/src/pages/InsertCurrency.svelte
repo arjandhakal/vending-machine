@@ -12,6 +12,7 @@
   import InsertCurrencyForm from "../lib/InsertCurrencyForm.svelte";
   import InsertCurrencyPanel from "../lib/InsertCurrencyPanel.svelte";
   import { makePurchaseAPI } from "../api";
+  import { fly } from "svelte/transition";
 
   let cartItems: CartItem[] | undefined;
   let totalInserted: number;
@@ -62,7 +63,7 @@
   });
 </script>
 
-<div>
+<div in:fly={{ x: -200, duration: 300, delay: 300 }}>
   <button on:click={() => navigateTo(Pages.ITEMS)}> Back to Items List </button>
   <InsertCurrencyForm {onSubmit} />
   <CartPanel />

@@ -1,2 +1,18 @@
+@import "@fontsource/dongle";
+
+html {
+  /* font */
+  --font-sans: "Dongle", sans-serif;
+}
+
 :root {
+  --theme-background-color: rgba(12, 16, 22, 0.9);
+  --theme-text-color: #c9a16f;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 1.5rem;
+  background-color: var(--theme-background-color);
+  color: var(--theme-text-color);
 }

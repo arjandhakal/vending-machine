@@ -8,7 +8,10 @@
   const filteredRoutes = routes.filter((route) => route.page != Pages.HOME);
 </script>
 
-<div transition:fly={{ y: 200, duration: 1000 }}>
+<div
+  in:fly={{ x: -200, duration: 300, delay: 300 }}
+  out:fly={{ x: -200, duration: 300 }}
+>
   <h1>Digital Vending Machine</h1>
   <MessagePanel>Simple and easy to use digital vending machine</MessagePanel>
   {#each filteredRoutes as route}

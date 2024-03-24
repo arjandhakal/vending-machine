@@ -19,7 +19,7 @@
   });
 </script>
 
-<div transition:fly={{ y: 200, duration: 1000 }}>
+<div in:fly={{ x: -200, duration: 300, delay: 300 }}>
   <button on:click={() => navigateTo(Pages.HOME)}> Back to home </button>
 
   {#each $products.data as item (item.id)}
