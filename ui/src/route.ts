@@ -8,7 +8,7 @@ export const routes = [
     page: Pages.HOME,
   },
   {
-    title: "Items List",
+    title: "Browse Items",
     page: Pages.ITEMS,
   },
 ];

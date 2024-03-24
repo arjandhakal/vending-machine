@@ -8,6 +8,7 @@
 </script>
 
 <main>
+  <h1>Digital Vending Machine</h1>
   {#if $displayPage.current === Pages.HOME}
     <Home />
   {/if}
@@ -25,4 +26,17 @@
   {/if}
 </main>
 
-<style></style>
+<style>
+  main {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    margin-inline: auto;
+  }
+
+  @media only screen and (min-width: 600px) {
+    main {
+      width: 500px;
+    }
+  }
+</style>

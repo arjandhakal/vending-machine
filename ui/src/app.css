@@ -3,6 +3,7 @@
 html {
   /* font */
   --font-sans: "Dongle", sans-serif;
+  --surface-1-dark: #161c26;
 }
 
 :root {
@@ -15,4 +16,41 @@ body {
   font-size: 1.5rem;
   background-color: var(--theme-background-color);
   color: var(--theme-text-color);
+}
+
+section {
+  width: 100%;
+}
+
+.button {
+  background-color: var(--surface-1-dark);
+  font-family: var(--font-sans);
+  border-radius: 15px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.button:hover {
+  border: 1px solid var(--theme-text-color);
+}
+
+.button button {
+  background: transparent;
+  border: none;
+  width: 100%;
+  color: var(--theme-text-color);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.button-reverse {
+  background-color: var(--theme-text-color);
+}
+
+.button-reverse:hover {
+  border: 1px solid var(--surface-1-dark);
+}
+
+.button-reverse button {
+  color: var(--surface-1-dark);
 }

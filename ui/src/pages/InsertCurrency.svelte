@@ -63,7 +63,7 @@
   });
 </script>
 
-<div in:fly={{ x: -200, duration: 300, delay: 300 }}>
+<section in:fly={{ x: -200, duration: 300, delay: 300 }}>
   <button on:click={() => navigateTo(Pages.ITEMS)}> Back to Items List </button>
   <InsertCurrencyForm {onSubmit} />
   <CartPanel />
@@ -71,4 +71,4 @@
   <div>
     <button on:click={makePurchase}>Purchase </button>
   </div>
-</div>
+</section>
