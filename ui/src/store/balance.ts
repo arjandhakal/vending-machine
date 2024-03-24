@@ -1,19 +1,5 @@
-import { writable } from "svelte/store";
-import { fetchBalanceAPI } from "../api";
-
-type Balance = {
-  coinsInMachine: number;
-  cashInMachine: number;
-  userCashInserted: number;
-  userCoinsInserted: number;
-};
-
-type BalanceStore = {
-  isInserting: boolean;
-  isFetchinBalance: boolean;
-  error: null | string;
-  data: Balance;
-};
+import { writable, derived } from "svelte/store";
+import { fetchBalanceAPI, insertBalanceAPI } from "../api";
 
 const createBalance = () => {
   const { subscribe, update } = writable<BalanceStore>({
@@ -59,10 +45,34 @@ const createBalance = () => {
     }
   }
 
+  async function insertBalance(data: { type: string; amount: number }) {
+    try {
+      update((value) => ({
+        ...value,
+        isInserting: true,
+      }));
+
+      const result = await insertBalanceAPI(data);
+
+      update((value) => ({
+        ...value,
+        isInserting: false,
+        data: result.data,
+      }));
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
   return {
     subscribe,
     fetchBalance,
+    insertBalance,
   };
 };
 
 export const balance = createBalance();
+export const insertedTotal = derived(
+  balance,
+  ($b) => $b.data.userCashInserted + $b.data.userCoinsInserted
+);

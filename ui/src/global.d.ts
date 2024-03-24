@@ -16,6 +16,20 @@ declare global {
     insertedCash: number;
     insertedCoin: number;
   };
+
+  type Balance = {
+    coinsInMachine: number;
+    cashInMachine: number;
+    userCashInserted: number;
+    userCoinsInserted: number;
+  };
+
+  type BalanceStore = {
+    isInserting: boolean;
+    isFetchinBalance: boolean;
+    error: null | string;
+    data: Balance;
+  };
 }
 
 export {};

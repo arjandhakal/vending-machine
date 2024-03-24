@@ -1,16 +1,47 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import { Pages } from "../constants";
-  import { navigateTo, balance } from "../store/index";
+  import {
+    navigateTo,
+    balance,
+    insertedTotal,
+    cartTotal,
+  } from "../store/index";
   import CartPanel from "../lib/CartPanel.svelte";
   import InsertCurrencyForm from "../lib/InsertCurrencyForm.svelte";
+  import InsertCurrencyPanel from "../lib/InsertCurrencyPanel.svelte";
+
+  let currentBalance: BalanceStore | undefined;
+  const unsubscribeBalance = balance.subscribe((v) => (currentBalance = v));
+  let totalInserted: number;
+  let totalCost: number;
+  const unsubscribeInsertedTotal = insertedTotal.subscribe(
+    (v) => (totalInserted = v)
+  );
+  const unsubscribeTotalCost = cartTotal.subscribe((v) => (totalCost = v));
 
   function onSubmit(data: { amount: number; type: string }) {
-    console.log(data);
+    balance.insertBalance(data);
+  }
+
+  function makePurchase() {
+    if (totalInserted < totalCost) {
+      console.log("Amount inserted is not enough to purchase items");
+      return;
+    }
+    // if inserted coin + inserted cash is less that < cost, don't continue
+    // make purchase (call api)
+    // go to result page if sucess, otherwise show error
   }
 
   onMount(() => {
     balance.fetchBalance();
+  });
+
+  onDestroy(() => {
+    unsubscribeBalance();
+    unsubscribeInsertedTotal();
+    unsubscribeTotalCost();
   });
 </script>
 
@@ -18,4 +49,8 @@
   <button on:click={() => navigateTo(Pages.ITEMS)}> Back to Items List </button>
   <InsertCurrencyForm {onSubmit} />
   <CartPanel />
+  <InsertCurrencyPanel />
+  <div>
+    <button on:click={makePurchase}>Purchase </button>
+  </div>
 </div>
