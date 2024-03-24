@@ -1,2 +1,3 @@
 export { products } from "./products";
-export { displayPage } from "./displayPage";
+export { displayPage, navigateTo } from "./displayPage";
+export { cart, cartTotal } from "./cart";

@@ -17,7 +17,12 @@ let pepsi = {
 
 describe("testing cart store", () => {
   let cartItems: CartItem[] | undefined;
-  const { subscribe: subscribeCartItems, clearCart, addItem } = cart;
+  const {
+    subscribe: subscribeCartItems,
+    clearCart,
+    addItem,
+    removeItem,
+  } = cart;
   let unsubscribeCartItems: Unsubscriber;
 
   let totalCost: number | undefined;
@@ -71,6 +76,26 @@ describe("testing cart store", () => {
   });
 
   // TODO : subtract page
+  it("should remove items properly", () => {
+    for (let i = 0; i < 5; i++) {
+      addItem(coke);
+    }
+
+    addItem(pepsi);
+
+    removeItem(coke);
+
+    expect(cartItems).toMatchObject([
+      { ...coke, quantity: 4 },
+      { ...pepsi, quantity: 1 },
+    ]);
+
+    removeItem(pepsi);
+    expect(cartItems).toMatchObject([{ ...coke, quantity: 4 }]);
+
+    removeItem(pepsi); // removing non existing item from cart
+    expect(cartItems).toMatchObject([{ ...coke, quantity: 4 }]);
+  });
 
   it("should calculate the total cost of items in cart properly", () => {
     expect(totalCost).toBe(0);

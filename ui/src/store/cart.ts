@@ -23,8 +23,28 @@ const createCart = () => {
     });
   }
 
+  function removeItem(item: Product) {
+    update((items) => {
+      const itemsIndex = items.findIndex((i) => item.id === i.id);
+      const itemExists = itemsIndex !== -1;
+      if (itemExists) {
+        const itemToUpdate = items[itemsIndex];
+        let updatedItems;
+        if (itemToUpdate.quantity > 1) {
+          updatedItems = [...items];
+          updatedItems[itemsIndex].quantity -= 1;
+          return updatedItems;
+        } else {
+          return items.filter((i) => i.id !== item.id);
+        }
+      }
+      return items;
+    });
+  }
+
   return {
     addItem,
+    removeItem,
     subscribe,
     clearCart,
   };
