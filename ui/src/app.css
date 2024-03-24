@@ -22,6 +22,10 @@ section {
   width: 100%;
 }
 
+hr {
+  border-color: var(--theme-text-color);
+}
+
 .button {
   background-color: var(--surface-1-dark);
   font-family: var(--font-sans);

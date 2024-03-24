@@ -5,6 +5,7 @@
   import CartPanel from "../lib/CartPanel.svelte";
   import { Pages } from "../constants";
   import CustomButton from "../lib/CustomButton.svelte";
+  import ItemBox from "../lib/ItemBox.svelte";
 
   function handleContinue() {
     navigateTo(Pages.INSERT_CURRENCY);
@@ -21,25 +22,20 @@
 </script>
 
 <section in:fly={{ x: -200, duration: 300, delay: 300 }}>
-  <button on:click={() => navigateTo(Pages.HOME)}> Back to home </button>
+  <div class="back-button">
+    <CustomButton
+      onClick={() => navigateTo(Pages.HOME)}
+      buttonLabel="← Back"
+      ariaLabel="Back to Home"
+    />
+  </div>
 
   <div class="items-list">
     {#each $products.data as item (item.id)}
-      <div class="item-box">
-        <div>{item.name}</div>
-        <div>Price: Rs {item.price}</div>
-        <div class="buttons">
-          <div class="button">
-            <button on:click={() => cart.addItem(item)}>+</button>
-          </div>
-          <div class="button">
-            <button on:click={() => cart.removeItem(item)}>-</button>
-          </div>
-        </div>
-      </div>
+      <ItemBox {item} />
     {/each}
   </div>
-
+  <hr />
   <CartPanel />
   {#if $cart.length > 0}
     <div class="action-btns">
@@ -72,24 +68,8 @@
     gap: 20px;
   }
 
-  .item-box {
+  .back-button {
     max-width: 100px;
-    border: 2px solid var(--theme-text-color);
-    border-radius: 15px;
-    padding: 10px;
-  }
-
-  .buttons {
-    display: flex;
-    justify-content: space-around;
-  }
-
-  .buttons .button {
-    background: var(--theme-text-color);
-  }
-
-  .buttons button {
-    width: 30px;
-    color: #333;
+    margin-bottom: 20px;
   }
 </style>
