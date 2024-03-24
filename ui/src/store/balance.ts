@@ -64,3 +64,5 @@ const createBalance = () => {
     fetchBalance,
   };
 };
+
+export const balance = createBalance();
