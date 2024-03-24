@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { apiUrl } from "../constants";
+import { fetchProductsAPI } from "../api";
 
 type ProductsStore = {
   isFetching: boolean;
@@ -31,12 +31,7 @@ const createProducts = () => {
           isFetching: true,
         };
       });
-      const url = apiUrl + "/product/v1";
-      const response = await fetch(url);
-      const result = await response.json();
-      if (!result.success) {
-        throw new Error(result.message);
-      }
+      const result = await fetchProductsAPI();
       update((value) => {
         return {
           isFetching: false,
