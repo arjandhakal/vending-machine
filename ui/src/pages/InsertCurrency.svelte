@@ -29,9 +29,19 @@
       console.log("Amount inserted is not enough to purchase items");
       return;
     }
-    // if inserted coin + inserted cash is less that < cost, don't continue
-    // make purchase (call api)
-    // go to result page if sucess, otherwise show error
+
+    /*
+    input: 
+      cartItems: []
+
+    return:
+      {
+        change: {
+          coins: x,
+          cash: x
+        }
+      }
+   */
   }
 
   onMount(() => {
