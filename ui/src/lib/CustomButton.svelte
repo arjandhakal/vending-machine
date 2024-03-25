@@ -5,6 +5,7 @@
   export let ariaLabel: string;
   export let buttonLabel: string;
   export let styleClass: string = "";
+  export let disabled: boolean = false;
 </script>
 
 <div
@@ -20,9 +21,16 @@
   tabindex="0"
   aria-label={ariaLabel}
   class={`button ${styleClass}`}
+  class:disabled
   role="button"
 >
-  <button>
+  <button {disabled}>
     {buttonLabel}
   </button>
 </div>
+
+<style>
+  .disabled {
+    background-color: gray;
+  }
+</style>
