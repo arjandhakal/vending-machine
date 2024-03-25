@@ -1,15 +1,17 @@
 <script lang="ts">
+  import CustomButton from "./CustomButton.svelte";
+
   export let onSubmit: (data: { amount: number; type: string }) => void;
 
   const CASH = "cash";
   const COIN = "coin";
   let selectedCurrency = CASH;
-  let insertAmount = 0;
+  let insertAmount: number;
   let errors: Record<string, any> = {};
 
   const validate = () => {
     errors = {};
-    if (insertAmount < 2) {
+    if (insertAmount < 1 || !Number.isInteger(insertAmount)) {
       errors["insertAmount"] = "Amount Must be valid";
     }
   };
@@ -26,6 +28,7 @@
         type: selectedCurrency,
       });
       clearForm();
+      errors = {};
     }
   };
 </script>
@@ -58,8 +61,49 @@
     />
     {#if errors.insertAmount}
       <span>{errors.insertAmount}</span>
+    {:else}
+      <span class="error-placeholder"> Error placeholder</span>
     {/if}
   </div>
-
-  <button type="submit">Insert</button>
+  <CustomButton
+    onClick={validateAndSubmit}
+    buttonLabel="Insert"
+    ariaLabel="Insert coin"
+    type="submit"
+    styleClass="button-reverse"
+  />
 </form>
+
+<style>
+  input[type="number"] {
+    color: var(--theme-text-color);
+    border: 2px solid transparent;
+    font-weight: 700;
+    font-size: 24pt;
+    padding: 3px 13px 0;
+    border-radius: 15px;
+    background-color: var(--surface-1-dark);
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  input:focus {
+    border: 2px solid var(--theme-text-color);
+    outline: none;
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  .error-placeholder {
+    visibility: hidden;
+  }
+</style>

@@ -13,6 +13,7 @@
   import InsertCurrencyPanel from "../lib/InsertCurrencyPanel.svelte";
   import { makePurchaseAPI } from "../api";
   import { fly } from "svelte/transition";
+  import CustomButton from "../lib/CustomButton.svelte";
 
   let cartItems: CartItem[] | undefined;
   let totalInserted: number;
@@ -35,7 +36,6 @@
     if (cartItems) {
       try {
         const result = await makePurchaseAPI(cartItems);
-        console.log(result);
         navigateTo(Pages.TRANSACTION_RESULT, {
           success: true,
           message: "Transaction completed successfully",
@@ -64,11 +64,31 @@
 </script>
 
 <section in:fly={{ x: -200, duration: 300, delay: 300 }}>
-  <button on:click={() => navigateTo(Pages.ITEMS)}> Back to Items List </button>
+  <div class="back-button">
+    <CustomButton
+      onClick={() => navigateTo(Pages.ITEMS)}
+      buttonLabel="← Back"
+      ariaLabel="Back to items page"
+    />
+  </div>
   <InsertCurrencyForm {onSubmit} />
+  <hr />
   <CartPanel />
+  <hr />
   <InsertCurrencyPanel />
+  <hr />
   <div>
-    <button on:click={makePurchase}>Purchase </button>
+    <CustomButton
+      onClick={makePurchase}
+      buttonLabel="Purchase"
+      ariaLabel="Purchase items"
+    />
   </div>
 </section>
+
+<style>
+  .back-button {
+    max-width: 100px;
+    margin-bottom: 20px;
+  }
+</style>

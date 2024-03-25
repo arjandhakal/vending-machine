@@ -18,6 +18,10 @@ body {
   color: var(--theme-text-color);
 }
 
+input {
+  font-family: var(--font-sans);
+}
+
 section {
   width: 100%;
 }

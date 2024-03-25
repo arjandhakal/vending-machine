@@ -6,6 +6,7 @@
   export let buttonLabel: string;
   export let styleClass: string = "";
   export let disabled: boolean = false;
+  export let type: "button" | "reset" | "submit" | null | undefined = "button";
 </script>
 
 <div
@@ -24,7 +25,7 @@
   class:disabled
   role="button"
 >
-  <button {disabled}>
+  <button {disabled} {type}>
     {buttonLabel}
   </button>
 </div>
