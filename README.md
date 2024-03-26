@@ -17,6 +17,8 @@ You will need Docker and Docker compose installed on your system.
 docker compose up
 ```
 
+Webpage should be live on localhost:5173
+
 ## Running locally
 
 Install and run the ui and server. Setup instructions are available in more detail in the README file of
