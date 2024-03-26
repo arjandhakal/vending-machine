@@ -6,6 +6,7 @@
     import { Pages } from "../constants";
     import CustomButton from "../lib/CustomButton.svelte";
     import ItemBox from "../lib/ItemBox.svelte";
+    import Loading from "../lib/Loading.svelte";
 
     function handleContinue() {
         navigateTo(Pages.INSERT_CURRENCY);
@@ -16,8 +17,12 @@
         navigateTo(Pages.HOME);
     }
 
-    onMount(() => {
+    function fetchProducts() {
         products.fetchProducts();
+    }
+
+    onMount(() => {
+        fetchProducts();
     });
 </script>
 
@@ -29,28 +34,38 @@
             ariaLabel="Back to Home"
         />
     </div>
-
-    <div class="items-list">
-        {#each $products.data as item (item.id)}
-            <ItemBox {item} />
-        {/each}
-    </div>
-    <hr />
-    <CartPanel />
-    {#if $cart.length > 0}
-        <div class="action-btns">
-            <CustomButton
-                ariaLabel="Continue"
-                buttonLabel="Continue"
-                onClick={handleContinue}
-            />
-            <CustomButton
-                ariaLabel="Cancel"
-                buttonLabel="Cancel"
-                styleClass="button-reverse"
-                onClick={handleCancel}
-            />
+    {#if $products.isFetching}
+        <Loading />
+    {:else if $products.error}
+        <h3>Could not fetch items: {$products.error}</h3>
+        <CustomButton
+            onClick={fetchProducts}
+            buttonLabel="Retry"
+            ariaLabel="Retry"
+        />
+    {:else}
+        <div class="items-list">
+            {#each $products.data as item (item.id)}
+                <ItemBox {item} />
+            {/each}
         </div>
+        <hr />
+        <CartPanel />
+        {#if $cart.length > 0}
+            <div class="action-btns">
+                <CustomButton
+                    ariaLabel="Continue"
+                    buttonLabel="Continue"
+                    onClick={handleContinue}
+                />
+                <CustomButton
+                    ariaLabel="Cancel"
+                    buttonLabel="Cancel"
+                    styleClass="button-reverse"
+                    onClick={handleCancel}
+                />
+            </div>
+        {/if}
     {/if}
 </section>
 

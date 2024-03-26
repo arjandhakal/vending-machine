@@ -24,6 +24,37 @@ async function hasCashForRefund(
   return true;
 }
 
+/**
+ * Calculates the coin and cash to be deducted and gives
+ * back the refund amount and the new balance of the system
+ */
+function deductBalanceAndGetRefund(
+  totalRefundAmount: number,
+  currentBalance: Balance,
+) {
+  let newBalance = { ...currentBalance };
+  let remainingAmount = totalRefundAmount;
+  let coinsRefunded = 0;
+  let cashRefunded = 0;
+
+  if (remainingAmount <= newBalance.coinsInMachine) {
+    coinsRefunded = remainingAmount;
+    newBalance.coinsInMachine -= coinsRefunded;
+  } else {
+    coinsRefunded = newBalance.coinsInMachine;
+    remainingAmount -= newBalance.coinsInMachine;
+    newBalance.coinsInMachine = 0;
+    cashRefunded = remainingAmount;
+    newBalance.cashInMachine -= cashRefunded;
+  }
+
+  return {
+    newBalance,
+    coinsRefunded,
+    cashRefunded,
+  };
+}
+
 async function handleRefund(req: Request, res: Response): Promise<void> {
   const { itemId } = req.body;
   if (!itemId) {
@@ -41,16 +72,20 @@ async function handleRefund(req: Request, res: Response): Promise<void> {
     throw new ServiceUnavailableException("System out of fund");
   }
 
-  const updatedItem = await updateProductById(item.id, {
+  await updateProductById(item.id, {
     stock: item.stock + 1,
   });
 
+  const { newBalance, coinsRefunded, cashRefunded } = deductBalanceAndGetRefund(
+    item.price,
+    balance,
+  );
+  await updateBalance(newBalance);
+
   res.status(StatusCodes.OK).json({
     data: {
-      balance,
-      item,
-      updatedItem,
-      hasCashForRefund,
+      coins: coinsRefunded,
+      cash: cashRefunded,
     },
     success: true,
     message: "Item refunded success fully",

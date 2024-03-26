@@ -6,6 +6,7 @@
     import InsertCurrency from "./pages/InsertCurrency.svelte";
     import TransactionResult from "./pages/TransactionResult.svelte";
     import RefundItem from "./pages/RefundItem.svelte";
+    import RefundResult from "./pages/RefundResult.svelte";
 </script>
 
 <main>
@@ -28,6 +29,10 @@
 
     {#if $displayPage.current === Pages.REFUND_ITEM}
         <RefundItem />
+    {/if}
+
+    {#if $displayPage.current === Pages.REFUND_RESULT}
+        <RefundResult />
     {/if}
 </main>
 

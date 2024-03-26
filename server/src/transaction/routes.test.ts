@@ -2,7 +2,7 @@ import express from "express";
 import { initApp, shutdownApp } from "../app";
 import request from "supertest";
 import { StatusCodes } from "http-status-codes";
-import { fetchProductById, database as productDatabase } from "../product/db";
+import { database as productDatabase } from "../product/db";
 import { database as balanceDatabase } from "../balance/db";
 import { updateBalanceAndGetChange } from "./routes";
 
@@ -142,6 +142,8 @@ describe("Transaction Route (Refund)", () => {
   });
 
   test("refund, increases the stock of the item properly", async () => {
+    balanceDatabase.coinsInMachine = 100;
+    balanceDatabase.cashInMachine = 200;
     const stockBeforeRefund = productDatabase.find(
       (p: any) => p.id === 1,
     ).stock;
@@ -153,5 +155,60 @@ describe("Transaction Route (Refund)", () => {
 
     const cokeAfterRefund = productDatabase.find((p: any) => p.id === 1);
     expect(stockBeforeRefund + 1).toBe(cokeAfterRefund.stock);
+  });
+
+  test("refund, updates the balance properly, returning the change", async () => {
+    // checking when only coins are deducted
+    balanceDatabase.coinsInMachine = 25;
+    balanceDatabase.cashInMachine = 0;
+    let result = await request(app)
+      .put("/api/transaction/v1/refund")
+      .send({ itemId: 1 });
+    expect(result.body.data).toMatchObject({
+      coins: 20,
+      cash: 0,
+    });
+    expect(balanceDatabase.coinsInMachine).toBe(5);
+    expect(balanceDatabase.cashInMachine).toBe(0);
+
+    // checking when only cash can be deducted
+    balanceDatabase.coinsInMachine = 0;
+    balanceDatabase.cashInMachine = 30;
+    result = await request(app)
+      .put("/api/transaction/v1/refund")
+      .send({ itemId: 1 });
+    expect(result.body.data).toMatchObject({
+      coins: 0,
+      cash: 20,
+    });
+    expect(balanceDatabase.coinsInMachine).toBe(0);
+    expect(balanceDatabase.cashInMachine).toBe(10);
+
+    // checking when both coins and cash are deducted, test 1
+    balanceDatabase.coinsInMachine = 10;
+    balanceDatabase.cashInMachine = 30;
+    result = await request(app)
+      .put("/api/transaction/v1/refund")
+      .send({ itemId: 1 });
+    expect(result.body.data).toMatchObject({
+      coins: 10,
+      cash: 10,
+    });
+    expect(balanceDatabase.coinsInMachine).toBe(0);
+    expect(balanceDatabase.cashInMachine).toBe(20);
+
+    // checking when both coins and cash are deducted, test 2
+    balanceDatabase.coinsInMachine = 15;
+    balanceDatabase.cashInMachine = 30;
+
+    result = await request(app)
+      .put("/api/transaction/v1/refund")
+      .send({ itemId: 2 });
+    expect(result.body.data).toMatchObject({
+      coins: 15,
+      cash: 10,
+    });
+    expect(balanceDatabase.coinsInMachine).toBe(0);
+    expect(balanceDatabase.cashInMachine).toBe(20);
   });
 });
