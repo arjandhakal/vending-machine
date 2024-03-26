@@ -60,3 +60,23 @@ export async function makePurchaseAPI(cartItems: CartItem[]) {
   }
   return result;
 }
+
+export async function makeRefundAPI(itemId: number) {
+  const url = apiUrl + "/transaction/v1/refund";
+  const body = JSON.stringify({ itemId });
+  const headers = {
+    "Content-Type": "application/json",
+  };
+
+  const response = await fetch(url, {
+    method: "PUT",
+    headers,
+    body,
+  });
+
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(result.message);
+  }
+  return result;
+}
