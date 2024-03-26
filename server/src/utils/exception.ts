@@ -5,7 +5,7 @@ export class HttpException extends Error {
 
   constructor(
     message: string = "Something went wrong",
-    code = StatusCodes.INTERNAL_SERVER_ERROR
+    code = StatusCodes.INTERNAL_SERVER_ERROR,
   ) {
     super(message);
     this.statusCode = code;
@@ -17,5 +17,12 @@ export class BadRequestException extends HttpException {
   constructor(message = "Bad Request") {
     super(message, StatusCodes.BAD_REQUEST);
     Object.setPrototypeOf(this, BadRequestException.prototype);
+  }
+}
+
+export class ServiceUnavailableException extends HttpException {
+  constructor(message = "Service Unavailable") {
+    super(message, StatusCodes.SERVICE_UNAVAILABLE);
+    Object.setPrototypeOf(this, ServiceUnavailableException.prototype);
   }
 }
