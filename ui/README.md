@@ -1,6 +1,21 @@
-# Introduction
+## Getting Started 🚀
 
-A vending machine simulator
+### Prerequisites
+
+- Node - v20
+- Package manager (pnpm preferred)
+
+### Steps to run the project
+
+- Install the package `pnpm i`
+- Set up the environment variables. See Below.
+- Run the project using `pnpm dev`
+
+### Testing the project
+
+Run the command `pnpm test` . Uses the following tools:
+
+- vitest
 
 # Setting up environment variables
 
