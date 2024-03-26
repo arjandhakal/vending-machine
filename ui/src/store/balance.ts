@@ -74,5 +74,5 @@ const createBalance = () => {
 export const balance = createBalance();
 export const insertedTotal = derived(
   balance,
-  ($b) => $b.data.userCashInserted + $b.data.userCoinsInserted
+  ($b) => $b.data.userCashInserted + $b.data.userCoinsInserted,
 );

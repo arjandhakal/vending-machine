@@ -12,16 +12,15 @@ import { HttpException } from "./utils/exception";
 import { productRouter } from "./product/routes";
 import cors from "cors";
 import { balanceRouter } from "./balance/routes";
-import { globalLogger } from "./utils/logger";
 import { transactionRouter } from "./transaction/routes";
 
 let server: http.Server | undefined = undefined;
 
 function errorHandler(
   err: Errback,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction,
 ): void {
   const httpError = new HttpException();
   if (err instanceof HttpException) {
@@ -30,7 +29,7 @@ function errorHandler(
   }
 
   res.status(httpError.statusCode).json({
-    messsage: httpError.message,
+    message: httpError.message,
   });
 }
 

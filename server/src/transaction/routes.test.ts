@@ -6,7 +6,7 @@ import { database as productDatabase } from "../product/db";
 import { database as balanceDatabase } from "../balance/db";
 import { updateBalanceAndGetChange } from "./routes";
 
-describe("Transaction Routes", () => {
+describe("Transaction Routes (Purchase)", () => {
   const app = express();
   beforeAll(async () => {
     await initApp(app);
@@ -87,5 +87,128 @@ describe("Transaction Routes", () => {
       userCashInserted: 0,
       userCoinsInserted: 0,
     });
+  });
+});
+
+describe("Transaction Route (Refund)", () => {
+  const app = express();
+  beforeAll(async () => {
+    await initApp(app);
+  });
+
+  afterAll(async () => {
+    await shutdownApp();
+  });
+
+  test("refund should account for cash/coin in system properly", async () => {
+    balanceDatabase.coinsInMachine = 0;
+    balanceDatabase.cashInMachine = 0;
+
+    const res1 = await request(app)
+      .put("/api/transaction/v1/refund")
+      .send({ itemId: 1 });
+    expect(res1.status).toBe(StatusCodes.SERVICE_UNAVAILABLE);
+    balanceDatabase.coinsInMachine = 10;
+    balanceDatabase.cashInMachine = 9;
+
+    const res2 = await request(app)
+      .put("/api/transaction/v1/refund")
+      .send({ itemId: 1 });
+    expect(res2.status).toBe(StatusCodes.SERVICE_UNAVAILABLE);
+
+    balanceDatabase.coinsInMachine = 10;
+    balanceDatabase.cashInMachine = 10;
+
+    const res3 = await request(app)
+      .put("/api/transaction/v1/refund")
+      .send({ itemId: 1 });
+    expect(res3.status).toBe(StatusCodes.OK);
+
+    balanceDatabase.coinsInMachine = 20;
+    balanceDatabase.cashInMachine = 0;
+
+    const res4 = await request(app)
+      .put("/api/transaction/v1/refund")
+      .send({ itemId: 1 });
+    expect(res4.status).toBe(StatusCodes.OK);
+
+    balanceDatabase.coinsInMachine = 0;
+    balanceDatabase.cashInMachine = 20;
+
+    const res5 = await request(app)
+      .put("/api/transaction/v1/refund")
+      .send({ itemId: 1 });
+    expect(res5.status).toBe(StatusCodes.OK);
+  });
+
+  test("refund, increases the stock of the item properly", async () => {
+    balanceDatabase.coinsInMachine = 100;
+    balanceDatabase.cashInMachine = 200;
+    const stockBeforeRefund = productDatabase.find(
+      (p: any) => p.id === 1,
+    ).stock;
+
+    const res = await request(app)
+      .put("/api/transaction/v1/refund")
+      .send({ itemId: 1 });
+    expect(res.status).toBe(StatusCodes.OK);
+
+    const cokeAfterRefund = productDatabase.find((p: any) => p.id === 1);
+    expect(stockBeforeRefund + 1).toBe(cokeAfterRefund.stock);
+  });
+
+  test("refund, updates the balance properly, returning the change", async () => {
+    // checking when only coins are deducted
+    balanceDatabase.coinsInMachine = 25;
+    balanceDatabase.cashInMachine = 0;
+    let result = await request(app)
+      .put("/api/transaction/v1/refund")
+      .send({ itemId: 1 });
+    expect(result.body.data).toMatchObject({
+      coins: 20,
+      cash: 0,
+    });
+    expect(balanceDatabase.coinsInMachine).toBe(5);
+    expect(balanceDatabase.cashInMachine).toBe(0);
+
+    // checking when only cash can be deducted
+    balanceDatabase.coinsInMachine = 0;
+    balanceDatabase.cashInMachine = 30;
+    result = await request(app)
+      .put("/api/transaction/v1/refund")
+      .send({ itemId: 1 });
+    expect(result.body.data).toMatchObject({
+      coins: 0,
+      cash: 20,
+    });
+    expect(balanceDatabase.coinsInMachine).toBe(0);
+    expect(balanceDatabase.cashInMachine).toBe(10);
+
+    // checking when both coins and cash are deducted, test 1
+    balanceDatabase.coinsInMachine = 10;
+    balanceDatabase.cashInMachine = 30;
+    result = await request(app)
+      .put("/api/transaction/v1/refund")
+      .send({ itemId: 1 });
+    expect(result.body.data).toMatchObject({
+      coins: 10,
+      cash: 10,
+    });
+    expect(balanceDatabase.coinsInMachine).toBe(0);
+    expect(balanceDatabase.cashInMachine).toBe(20);
+
+    // checking when both coins and cash are deducted, test 2
+    balanceDatabase.coinsInMachine = 15;
+    balanceDatabase.cashInMachine = 30;
+
+    result = await request(app)
+      .put("/api/transaction/v1/refund")
+      .send({ itemId: 2 });
+    expect(result.body.data).toMatchObject({
+      coins: 15,
+      cash: 10,
+    });
+    expect(balanceDatabase.coinsInMachine).toBe(0);
+    expect(balanceDatabase.cashInMachine).toBe(20);
   });
 });

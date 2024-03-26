@@ -32,7 +32,7 @@ const createProducts = () => {
         };
       });
       const result = await fetchProductsAPI();
-      update((value) => {
+      update((_value) => {
         return {
           isFetching: false,
           error: null,
